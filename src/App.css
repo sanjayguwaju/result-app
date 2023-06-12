@@ -1,0 +1,61 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  background-color: #b1c289;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin-top: 20px;
+  background-color: ;
+}
+
+.form-container label {
+  margin-bottom: 10px;
+}
+
+.form-container input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.form-container button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.result-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+table {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+
+th {
+  background-color: #f5f5f5;
+}
+
+img {
+  margin-top: 20px;
+  width: 150px;
+  height: auto;
+}
