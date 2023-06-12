@@ -27,16 +27,14 @@ const App = () => {
       const resultHTML = `
         <div class="result-container">
           <h2>Result</h2>
-          <p><strong>Class:</strong> ${result.grade}</p>
-          <p><strong>Roll No:</strong> ${result.section}</p>
-          <p><strong>Gender:</strong> ${result.gender}</p>
           <p><strong>School Name:</strong> ABC School</p>
           <p><strong>School Address:</strong> 123 Main Street, City</p>
-          <p><strong>Exam:</strong> 2nd Terminal Examination</p>
           <p><strong>Symbol No:</strong> ${result.symbolNo}</p>
           <p><strong>Name:</strong> ${result.name}</p>
           <p><strong>Date of Birth:</strong> ${result.dob}</p>
           <p><strong>Batch Year:</strong> ${result.batchYear}</p>
+          <p><strong>Class:</strong> ${result.class}</p>
+          <p><strong>Section:</strong> ${result.section}</p>
           <h3>Subjects:</h3>
           <table>
             <thead>
@@ -116,13 +114,14 @@ const App = () => {
       {selectedResult && (
         <div className="result-container">
           <h2>Result</h2>
+          <img src="school-logo.png" alt="School Logo" />
           <p>
             <strong>School Name:</strong> ABC School
           </p>
           <p>
             <strong>School Address:</strong> 123 Main Street, City
           </p>
-          <img src="school-logo.png" alt="School Logo" />
+
           <p>
             <strong>Symbol No:</strong> {selectedResult.symbolNo}
           </p>
@@ -134,6 +133,12 @@ const App = () => {
           </p>
           <p>
             <strong>Batch Year:</strong> {selectedResult.batchYear}
+          </p>
+          <p>
+            <strong>Class:</strong> {selectedResult.class}
+          </p>
+          <p>
+            <strong>Section:</strong> {selectedResult.section}
           </p>
           <h3>Subjects:</h3>
           <table>

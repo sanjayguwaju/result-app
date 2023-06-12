@@ -32,13 +32,13 @@ export const dummyResults = [
       ],
     },
     {
-      symbolNo: '54321',
-      name: 'Jane Smith',
-      dob: '2006-02-15',
+      symbolNo: '123',
+      name: 'Amit Shrestha',
+      dob: '2000-01-01',
       batchYear: '2023',
       class: '10',
       section: 'B',
-      gender: 'Female',
+      gender: 'Male',
       subjects: [
         {
           name: 'Mathematics',
