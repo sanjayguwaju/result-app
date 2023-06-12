@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import { saveAs } from 'file-saver';
 import './App.css';
-import schoolLogo from './school-logo.png';
 
 const App = () => {
   const [symbolNo, setSymbolNo] = useState('');
@@ -16,9 +15,9 @@ const App = () => {
       dob: '1995-07-15',
       batchYear: '2022',
       subjects: [
-        { name: 'Math', marks: 80, totalMarks: 100 },
-        { name: 'Science', marks: 75, totalMarks: 100 },
-        { name: 'English', marks: 90, totalMarks: 100 },
+        { name: 'Math', marks: 80, totalMarks: 100, passMarks: 40 },
+        { name: 'Science', marks: 75, totalMarks: 100, passMarks: 40 },
+        { name: 'English', marks: 90, totalMarks: 100, passMarks: 40 },
       ],
       passMarksCriteria: 40,
       fullMarksCriteria: 100,
@@ -44,10 +43,6 @@ const App = () => {
 
       const resultHTML = `
         <div class="result-container">
-          <div class="header">
-            <img src="${schoolLogo}" alt="School Logo" />
-            <h2>School Name: ABC School</h2>
-          </div>
           <h2>Result</h2>
           <p><strong>Symbol No:</strong> ${result.symbolNo}</p>
           <p><strong>Name:</strong> ${result.name}</p>
@@ -70,7 +65,75 @@ const App = () => {
                 <tr>
                   <td>${subject.name}</td>
                   <td>${subject.totalMarks}</td>
-                  <td>${passMarksCriteria}</td>
+                  <td>${subject.passMarks}</td>
+                  <td>${subject.marks}</td>
+                </tr>
+              `
+                )
+                .join('')}
+            </tbody>
+          </table>
+          <p><strong>Percentage:</strong> ${percentage}%</p>
+          <p><strong>Pass Marks Criteria:</strong> ${passMarksCriteria}</p>
+          <p><strong>Full Marks Criteria:</strong> ${fullMarksCriteria}</p>
+          <p><strong>Status:</strong> ${passFailStatus}</p>
+          <p><strong>Obtained Marks:</strong> ${obtainedMarks}</p>
+          <p><strong>School Name:</strong> ABC School</p>
+          <img src="school-logo.png" alt="School Logo" />
+        </div>
+      `;
+
+      const opt = {
+        margin: 1,
+        filename: 'result.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      };
+
+      setSelectedResult(result);
+      html2pdf().from(resultHTML).set(opt).save();
+    } else {
+      setSelectedResult(null);
+    }
+  };
+
+  const downloadResult = () => {
+    const result = results.find((result) => result.symbolNo === symbolNo);
+    if (result) {
+      const percentage = calculatePercentage(result);
+      const passMarksCriteria = result.passMarksCriteria;
+      const fullMarksCriteria = result.fullMarksCriteria;
+      const obtainedMarks = result.subjects.reduce((total, subject) => total + subject.marks, 0);
+      const passFailStatus = obtainedMarks >= passMarksCriteria ? 'Passed' : 'Failed';
+
+      const resultHTML = `
+        <div class="result-container">
+          <h2>Result</h2>
+          <p><strong>School Name:</strong> ABC School</p>
+          <img src="school-logo.png" alt="School Logo" />
+          <p><strong>Symbol No:</strong> ${result.symbolNo}</p>
+          <p><strong>Name:</strong> ${result.name}</p>
+          <p><strong>Date of Birth:</strong> ${result.dob}</p>
+          <p><strong>Batch Year:</strong> ${result.batchYear}</p>
+          <h3>Subjects:</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Full Marks</th>
+                <th>Pass Marks</th>
+                <th>Marks</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.subjects
+                .map(
+                  (subject) => `
+                <tr>
+                  <td>${subject.name}</td>
+                  <td>${subject.totalMarks}</td>
+                  <td>${subject.passMarks}</td>
                   <td>${subject.marks}</td>
                 </tr>
               `
@@ -94,10 +157,7 @@ const App = () => {
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
       };
 
-      setSelectedResult(result);
       html2pdf().from(resultHTML).set(opt).save();
-    } else {
-      setSelectedResult(null);
     }
   };
 
@@ -124,15 +184,20 @@ const App = () => {
         <button type="button" onClick={generateResult}>
           Generate Result
         </button>
+        {selectedResult && (
+          <button type="button" onClick={downloadResult}>
+            Download Result
+          </button>
+        )}
       </form>
 
       {selectedResult && (
         <div className="result-container">
-          <div className="header">
-            <img src={schoolLogo} alt="School Logo" />
-            <h2>School Name: ABC School</h2>
-          </div>
           <h2>Result</h2>
+          <p>
+            <strong>School Name:</strong> ABC School
+          </p>
+          <img src="school-logo.png" alt="School Logo" />
           <p>
             <strong>Symbol No:</strong> {selectedResult.symbolNo}
           </p>
@@ -160,7 +225,7 @@ const App = () => {
                 <tr key={subject.name}>
                   <td>{subject.name}</td>
                   <td>{subject.totalMarks}</td>
-                  <td>{selectedResult.passMarksCriteria}</td>
+                  <td>{subject.passMarks}</td>
                   <td>{subject.marks}</td>
                 </tr>
               ))}
@@ -177,10 +242,7 @@ const App = () => {
           </p>
           <p>
             <strong>Status:</strong>{' '}
-            {selectedResult.subjects.reduce((total, subject) => total + subject.marks, 0) >=
-            selectedResult.passMarksCriteria
-              ? 'Passed'
-              : 'Failed'}
+            {selectedResult.subjects.reduce((total, subject) => total + subject.marks, 0) >= selectedResult.passMarksCriteria ? 'Passed' : 'Failed'}
           </p>
           <p>
             <strong>Obtained Marks:</strong>{' '}
